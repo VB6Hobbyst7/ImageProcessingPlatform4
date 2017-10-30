@@ -1,0 +1,50 @@
+﻿'Imports System.IO
+'Imports System.ComponentModel
+'Imports System.Collections.Generic
+'Imports System.Collections.ObjectModel
+'Imports System.Reflection
+'Namespace FuncList
+'    Public Class aFunc
+'        Implements INotifyPropertyChanged
+'        Public Event PropertyChanged(ByVal sender As Object, ByVal e As System.ComponentModel.PropertyChangedEventArgs) Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+
+'        Protected Sub Notify(ByVal PropName As String)
+'            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(PropName))
+'        End Sub
+
+'        Private _AFuncIndex As Integer
+'        Private _AFuncMethod As MethodInfo
+'        Private _AFuncInfo As String
+
+'        Public Property AFuncIndex() As Integer
+'            Get
+
+'            End Get
+'            Set(value As Integer)
+
+'            End Set
+'        End Property
+
+'        Public Property AFuncMethod As MethodInfo
+'            Get
+
+'            End Get
+'            Set(value As MethodInfo)
+
+'            End Set
+'        End Property
+
+'        Public Property AFuncInfo As String
+'            Get
+
+'            End Get
+'            Set(value As String)
+
+'            End Set
+'        End Property
+'    End Class
+
+'    Public Class Funcs
+'        Inherits ObservableCollection(Of aFunc)
+'    End Class
+'End Namespace

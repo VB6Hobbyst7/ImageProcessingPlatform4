@@ -1,0 +1,644 @@
+﻿<Window x:Class="MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:conv="clr-namespace:ImageProcessingPlatform4.NSConverters"
+    Title="交通路牌检测平台" Width="1200" Height="760" WindowStyle="None" Icon="Icons\MyIcon.ico" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <!--Button样式2-->
+        <Style TargetType="{x:Type Button}" x:Key="MyButtonStyle2">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border2" BorderThickness="1" BorderBrush="Transparent" Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border2" Property="BorderBrush">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="WhiteSmoke"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border2" Property="BorderBrush">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="SteelBlue"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!--TabControl样式-->
+        <Style TargetType="{x:Type TabControl}" x:Key="MyTabControlStyle1">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Background="LightBlue" BorderThickness="0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0" Width="32" Height="32" Source="Icons\Icon32.png"/>
+                                    <Label Content="交通标示自动识别系统 II" FontSize="16" Foreground="#0EB0DB" Grid.Column="1" MouseLeftButtonDown="Title_MouseDown" MouseDoubleClick="Title_MouseDoubleClick"/>
+                                    <DockPanel x:Name="HeaderPanel" Grid.Column="2" IsItemsHost="True" HorizontalAlignment="Right"/>
+                                    <Border Grid.Column="3" Background="SkyBlue" Width="100">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                            <Button Margin="4" Style="{StaticResource MyButtonStyle2}" Click="MinimumWin">
+                                                <Button.Content>
+                                                    <Image Width="11" Height="9" Source="Icons\Minimum.png"/>
+                                                </Button.Content>
+                                            </Button>
+                                            <Button Margin="4" Style="{StaticResource MyButtonStyle2}" Click="MaximumWin">
+                                                <Button.Content>
+                                                    <Image Width="11" Height="9" Source="Icons\Maximum.png"/>
+                                                </Button.Content>
+                                            </Button>
+                                            <Button Margin="4" Style="{StaticResource MyButtonStyle2}" Click="CloseWin">
+                                                <Button.Content>
+                                                    <Image Width="11" Height="9" Source="Icons\Close.png"/>
+                                                </Button.Content>
+                                            </Button>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                            <Border BorderThickness="0" Grid.Row="1" Background="White">
+                                <ContentPresenter ContentSource="SelectedContent" Margin="0"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--TabItem样式-->
+        <Style TargetType="{x:Type TabItem}" x:Key="MyTabItemStyle1">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid Height="32" Width="100" HorizontalAlignment="Right">
+                            <Border Name="Border" Background="SkyBlue" BorderThickness="0">
+                                <ContentPresenter x:Name="ContentSite" 
+                                          ContentSource="Header"
+                                          Margin="7,0,12,4"
+                                          RecognizesAccessKey="True"/>
+                            </Border>
+
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="WhiteSmoke"></SolidColorBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Button样式1-->
+        <Style TargetType="{x:Type Button}" x:Key="MyButtonStyle1">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border2" Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform CenterX="16" CenterY="16" ScaleX="1.1" ScaleY="1.1" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform CenterX="16" CenterY="16" ScaleX="1" ScaleY="1" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--ToggleButton样式1-->
+        <Style TargetType="{x:Type ToggleButton}" x:Key="MyToggleButtonStyle1">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="border2" Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform CenterX="16" CenterY="16" ScaleX="1.1" ScaleY="1.1" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform CenterX="16" CenterY="16" ScaleX="1" ScaleY="1" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border2" Property="BorderThickness" Value="1"/>
+                                <Setter TargetName="border2" Property="BorderBrush" Value="DimGray"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Foreground" Value="Gray"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--转化器-->
+        <conv:UriToThumbConverter x:Key="MyThumbConverter"/>
+        <conv:ProcessStateToUriConverter x:Key="MyProcessStateConverter"/>
+        <conv:VisibleToStr x:Key="MyDirVisibleConverter"/>
+        <conv:IsWrongToColor x:Key="MyWrongStateConverter"/>
+        <conv:SignFlagToText x:Key="MySignFlagTextConverter"/>
+        <conv:SignFlagToColor x:Key="MySignFlagConverter"/>
+        <conv:ModifyStateToUriConverter x:Key="MyModifyStateConverter"/>
+    </Window.Resources>
+    
+    <Grid x:Name="BaseRoot">
+        <TabControl x:Name="tc" SelectedIndex="1" 
+                    Background="CadetBlue" 
+                    Style="{StaticResource MyTabControlStyle1}" ItemContainerStyle="{StaticResource MyTabItemStyle1}">
+            <TabItem x:Name="tiSetting" DockPanel.Dock="Right">
+
+                <TabItem.Header>
+                    <Image Width="36" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Right" Source="ICons\Setting.png">
+                       <Image.ToolTip>
+                            <StackPanel>
+                                <TextBlock Foreground="SteelBlue" Text="数据管理"/>
+                                <TextBlock Text="导入、导出、删除或归类文件夹，以便在图像导航列表中使用"/>
+                            </StackPanel>
+                       </Image.ToolTip>
+                    </Image>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Border Height="40" Background="WhiteSmoke" Grid.Row="0" Grid.ColumnSpan="3">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
+                            <Button x:Name="btn_import" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,40,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="导入"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="将左侧文本框内文件夹解析到库"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Import.png" />
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="btn_dirsta" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="统计处理结果数量"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="统计并显示文件夹中已处理的文件数量"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Sta.png" />
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="btn_dirshow" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="显示文件夹"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="在图像导航列表中显示选定项中的文件"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Show.png" />
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="btn_dirhide" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="隐藏文件夹"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="不在图像导航列表中显示选定项中的文件"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Hide.png" />
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="btn_dirreset" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="清除处理结果"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="清除选定的文件夹的检测数据"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Reset.png" />
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="btn_dirdel" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="删除文件夹"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="从库中清除选定的文件夹及其相关信息"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Delete.png" />
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="btn_direxport_xml" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="20,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="导出为xml"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="导出所有检测数据到xml格式"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Export_Xml.png" />
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="btn_direxport_csv" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="导出为csv"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="导出所有检测数据到csv格式"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Export_Csv.png" />
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBox Grid.Row="1" Grid.Column="0" x:Name="TextBox1" AcceptsReturn="True" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+                    <GridSplitter Grid.Column="0" Grid.Row="1" Width="2"/>
+                    <ListView x:Name="folderList" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch"
+                        ItemsSource="{Binding Path=DirId}" IsSynchronizedWithCurrentItem="True" SelectionMode="Multiple">
+                        <ListView.View>
+                            <GridView x:Name="grv">
+                                <GridViewColumn Width="40">
+                                    <GridViewColumnHeader>
+                                        <CheckBox x:Name="cb_CheckAllDir"/>
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <CheckBox IsChecked="{Binding Path=IsSelected,RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="180" DisplayMemberBinding="{Binding Path=DirName}" Header="文件夹"/>
+                                <GridViewColumn Width="60" DisplayMemberBinding="{Binding Path=Visible,Converter={StaticResource MyDirVisibleConverter}}" Header="是否可见"/>
+                                <GridViewColumn Width="80" DisplayMemberBinding="{Binding Path=ImgCount}" Header="文件数量"/>
+                                <GridViewColumn Width="80" DisplayMemberBinding="{Binding Path=ProcessedCount}" Header="已处理数量"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <TabItem DockPanel.Dock="Right">
+
+                <TabItem.Header>
+                    <Image Width="36" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Right" Source="ICons\Start.png">
+                        <Image.ToolTip>
+                            <StackPanel>
+                                <TextBlock Foreground="SteelBlue" Text="主界面"/>
+                                <TextBlock Text="检测图像中的交通路牌，并查看和修改结果"/>
+                            </StackPanel>
+                        </Image.ToolTip>
+                    </Image>
+                </TabItem.Header>
+                <Grid x:Name="LayoutRoot">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MinWidth="400"/>
+                        <ColumnDefinition Width="350" MinWidth="150"/>
+                    </Grid.ColumnDefinitions>
+                    <Border x:Name="Infotoolbar" Height="40" Background="#33FFFFFF" Grid.Column="0" Grid.Row="2" Panel.ZIndex="2" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                            <TextBlock FontSize="14" Foreground="Silver" x:Name="txtState"/>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="Edittoolbar" Height="40" Background="WhiteSmoke" Grid.Column="0" Grid.Row="0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                            <ToggleButton x:Name="btn_TargetAdd" Width="32" Height="32" Style="{StaticResource MyToggleButtonStyle1}" Margin="0,0,4,0">
+                                <ToggleButton.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="添加漏检标识"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="双态按钮"/>
+                                        <TextBlock Text="开启之后可在画面区域画框添加目标"/>
+                                    </StackPanel>
+                                </ToggleButton.ToolTip>
+                                <ToggleButton.Content>
+                                    <Image Width="32" Height="32" Source="Icons\PenAdd.png" />
+                                </ToggleButton.Content>
+                            </ToggleButton>
+                            <Button x:Name="btn_TargetAddOK" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0" Visibility="Collapsed">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="确认添加"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="确认添加目标"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Check.png" />
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="btn_TargetDelete" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="删除错检标识"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="删除画面中的选定目标"/>
+                                        <TextBlock Text="在画面中可多选，可用键盘上下左右键导航目标"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Minus.png" />
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="btn_Prior" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="上一幅"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Prior.png" />
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="btn_Next" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="下一幅"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Next.png" />
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                    <Border Height="40" Background="WhiteSmoke" Grid.Column="1" Grid.Row="0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
+
+                            <ToggleButton x:Name="btn_OKonce" Width="32" Height="32" Style="{StaticResource MyToggleButtonStyle1}" Margin="0,0,80,0">
+                                <ToggleButton.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="一键检测"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="双态按钮"/>
+                                        <TextBlock Text="一键遍历检测导航列表中所有图片，或停止检测"/>
+                                    </StackPanel>
+                                </ToggleButton.ToolTip>
+                                <ToggleButton.Content>
+                                    <Image Width="32" Height="32" Source="Icons\OKonce.png" />
+                                </ToggleButton.Content>
+                            </ToggleButton>
+                            
+                            <Button x:Name="btn_Resetresult" Width="32" Height="32" Style="{StaticResource MyButtonStyle1}" Margin="0,0,4,0">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="清除处理结果"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="按钮"/>
+                                        <TextBlock Text="清除列表里所有检测数据以便重新检测"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Reset.png" />
+                                </Button.Content>
+                            </Button>
+                            <ToggleButton x:Name="btn_BackGround" Width="32" Height="32" Style="{StaticResource MyToggleButtonStyle1}" Margin="0,0,4,0" Visibility="Collapsed">
+                                <ToggleButton.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="前台/后台切换"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="双态按钮"/>
+                                        <TextBlock Text="是/否动态显示检测结果"/>
+                                    </StackPanel>
+                                </ToggleButton.ToolTip>
+                                <ToggleButton.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Cup.png" />
+                                </ToggleButton.Content>
+                            </ToggleButton>
+                            <ToggleButton x:Name="btn_Play" Width="32" Height="32" Style="{StaticResource MyToggleButtonStyle1}" Margin="0,0,4,0">
+                                <ToggleButton.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Foreground="SteelBlue" Text="自动播放检测"/>
+                                        <TextBlock FontWeight="UltraBlack" Text="双态按钮"/>
+                                        <TextBlock Text="从选定列表项开始往下检测，或暂停检测"/>
+                                    </StackPanel>
+                                </ToggleButton.ToolTip>
+                                <ToggleButton.Content>
+                                    <Image Width="32" Height="32" Source="Icons\Slide.png" />
+                                </ToggleButton.Content>
+                            </ToggleButton>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Image x:Name="OriImg" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"/>
+                    <Viewbox x:Name="CanvasViewbox" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
+                        <ListBox x:Name="ShapeCanvas" ItemsSource="{Binding Path=TargetId}" SelectionMode="Extended">
+                            <ListBox.Style>
+                                <Style TargetType="ListBox">
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="Transparent"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="ItemsPanel">
+                                        <Setter.Value>
+                                        <ItemsPanelTemplate>
+                                            <Canvas>
+                                                <Canvas.Style>
+                                                    <Style TargetType="Canvas">
+                                                        <Style.Setters>
+                                                            <Setter Property="Background" Value="#00000000"/>
+                                                        </Style.Setters>
+                                                    </Style>
+                                                </Canvas.Style>
+                                            </Canvas>
+                                        </ItemsPanelTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.Style>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <ToggleButton Width="{Binding Path=Width}" Height="{Binding Path=Height}"
+                                                  IsChecked="{Binding Path=IsSelected,RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="{x:Type ToggleButton}">
+                                                <Style.Setters>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ToggleButton">
+                                                                <Border Name="border3" Background="Transparent" BorderThickness="5" BorderBrush="{Binding Path=IsWrong,Converter={StaticResource MyWrongStateConverter}}">
+                                                                    <ContentPresenter HorizontalAlignment="Center"/>
+                                                                </Border>
+                                                                
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="border3" Property="BorderBrush" Value="SteelBlue"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsChecked" Value="True">
+                                                                        <Setter TargetName="border3" Property="BorderBrush" Value="Blue"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Cursor" Value="Hand"/>
+                                                    <Setter Property="ToolTip">
+                                                        <Setter.Value>
+                                                            <StackPanel>
+                                                            <TextBlock TextWrapping="Wrap">特征：
+                                                                <TextBlock Text="{Binding Path=Flag,Converter={StaticResource MySignFlagTextConverter}}" Background="{Binding Path=Flag,Converter={StaticResource MySignFlagConverter}}"/>
+                                                            </TextBlock>
+                                                                <TextBlock TextWrapping="Wrap">左上角：
+                                                                <TextBlock Text="{Binding Path=Left}"/>
+                                                                <TextBlock Text="{Binding Path=Top}"/>
+                                                            </TextBlock>
+                                                            <TextBlock TextWrapping="Wrap">右下角：
+                                                                <TextBlock Text="{Binding Path=Right}"/>
+                                                                <TextBlock Text="{Binding Path=Bottom}"/>
+                                                            </TextBlock>
+                                                            </StackPanel>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style.Setters>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="Canvas.Left" Value="{Binding Path=Left}" />
+                                    <Setter Property="Canvas.Top" Value="{Binding Path=Top}" />
+                                    <Setter Property="OverridesDefaultStyle" Value="True"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <Border Name="back1" Background="Transparent" BorderThickness="0">
+                                                    <ContentPresenter VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </Viewbox>
+                    
+                    <GridSplitter Grid.Row="1" Grid.Column="0" Width="2" Background="WhiteSmoke" DragIncrement="4" />
+
+                    <ListBox x:Name="lstbox" Grid.Row="1" Grid.RowSpan="1" Grid.Column="2" Style="{StaticResource MyListBoxStyle1}" ItemContainerStyle="{StaticResource MyListBoxItemStyle1}"
+                             ItemsSource="{Binding Path=Fid}" IsSynchronizedWithCurrentItem="True">
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="2" Height="96">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="16"/>
+                                        <RowDefinition Height="16"/>
+                                        <RowDefinition Height="16"/>
+                                        <RowDefinition Height="16"/>
+                                        <RowDefinition Height="16"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Width="96" Height="72" HorizontalAlignment="Left" 
+                                           Source="{Binding Path=FullName, Converter={StaticResource MyThumbConverter}}" />
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Path=Name}" />
+                                    <TextBlock Grid.Row="1" Grid.Column="2">警示：
+                                        <TextBlock Text="{Binding Path=Red}" Foreground="Red"/>，指路：
+                                        <TextBlock Text="{Binding Path=Green}" Foreground="Green"/>
+                                    </TextBlock>
+                                    <TextBlock Grid.Row="2" Grid.Column="2">指示：
+                                        <TextBlock Text="{Binding Path=Blue}" Foreground="Blue"/>，警告：
+                                        <TextBlock Text="{Binding Path=Yellow}" Foreground="Orange"/>
+                                    </TextBlock>
+                                    <Image Grid.Row="0" Grid.Column="1" Source="{Binding Path=IsProcessed, Converter={StaticResource MyProcessStateConverter}}"/>
+                                    <Image Grid.Row="1" Grid.Column="1" Source="{Binding Path=IsModified, Converter={StaticResource MyModifyStateConverter}}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Border Height="40" Background="WhiteSmoke" Grid.Row="2" Grid.Column="1">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
+                            <ComboBox x:Name="cbQua" Margin="0,0,4,0" SelectedIndex="0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>

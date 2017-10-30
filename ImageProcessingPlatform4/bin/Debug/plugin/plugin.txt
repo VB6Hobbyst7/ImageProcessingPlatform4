@@ -1,0 +1,3 @@
+﻿[rby3Native.dll]
+HighQuality,Ladybug3
+LowQuality,PG全景相机

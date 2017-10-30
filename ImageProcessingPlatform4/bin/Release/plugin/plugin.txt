@@ -1,0 +1,3 @@
+﻿[wy2Native.dll]
+HighQuality,sfsdfsdfds
+LowQuality,sdgdggsdagasdsda

@@ -1,0 +1,29 @@
+﻿'Imports System.Reflection
+'Imports System.Reflection.Assembly
+'Imports ImageProcessingPlatform4.MainWindow
+'Module Class1
+'    Function Fun1() As MethodInfo()
+'        Dim ass As Assembly = Assembly.LoadFrom("plugin\rby3Native.dll")
+'        Dim mytypes As Type() = ass.GetTypes
+'        Dim obj As Object = Activator.CreateInstance(mytypes(0))
+
+'        Dim sr As IO.StreamReader = New IO.StreamReader("plugin\plugin.txt", System.Text.Encoding.UTF8)
+
+'        Dim input As String = sr.ReadToEnd
+'        Dim funstrline() As String = input.Replace(vbCrLf, ";").Split(";")
+'        sr.Close()
+'        Dim methods() As MethodInfo = New MethodInfo(funstrline.Length - 1) {}
+
+'        For i = 0 To funstrline.Length - 1
+'            Dim sb() As String = funstrline(i).Split(", ")
+'            methods(i) = mytypes(0).GetMethod(sb(0), New Type() {GetType(Integer), GetType(Object)})
+'            cbQua
+'        Next (i)
+
+'        'Dim method1 As MethodInfo = mytypes(0).GetMethod("HighQuality", New Type() {GetType(Integer), GetType(Object)})
+'        Dim param() As Object = New Object() {1, "E:\mat\image\8.jpg"}
+'        Dim obj2 As Object = methods(1).Invoke(obj, param)
+'        Return methods
+'    End Function
+
+'End Module

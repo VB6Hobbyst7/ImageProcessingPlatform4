@@ -1,0 +1,21 @@
+交通标示自动识别系统v2的改动如下：
+1.界面的小幅改动
+2.实现了dll的智能识别，只需将用matlab编译好的.NET Assembly dll（Native格式，其中函数还是输入为字符，输出为segfun信息） 放入 plugin文件夹中，并修改该文件夹中的 plugin.txt 即可实现智能的dll函数载入和运行
+
+plugin.txt的用法如下：
+	[rby3Native.dll]
+	HighQuality,Ladybug3
+	LowQuality,PG全景相机
+
+1.用"[]"框起来的是dll文件的名字，半角符号
+HighQuality 代表rby3Native.dll文件所包含的类（只包含一个类）中的函数名字
+Ladybug3 代表该函数在界面的拉框中所显示的名称
+HighQuality,Ladybug3 以半角逗号分隔
+
+2.不允许有空行，可多添加，例如：
+	[rby3Native.dll]
+	HighQuality,Ladybug3
+	LowQuality,PG全景相机
+	[myNative.dll]
+	City,城市
+	Country,农村
